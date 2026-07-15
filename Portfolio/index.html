@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sabrina Ruiz Alves — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,500;1,600&family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+
+  :root{
+    --cream:#f5f3ee;
+    --cream-soft:#efece4;
+    --ink:#19180f;
+    --ink-soft:#5c584c;
+    --line: rgba(25,24,15,0.14);
+    --blue-deep:#0b1440;
+    --blue-mid:#33418c;
+    --blue-light:#dce4f2;
+    --aubergine:#2e2438;
+    --aubergine-soft:#4a3a56;
+    --bg: var(--cream);
+    --fg: var(--ink);
+  }
+
+  *{ box-sizing:border-box; }
+
+  html{
+    scroll-behavior: smooth;
+  }
+
+  body{
+    margin:0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Courier New', Courier, monospace;
+    overflow-x:hidden;
+    transition: background 1.1s ease, color 1.1s ease;
+  }
+
+  .scroller{
+    height:100vh;
+    overflow-y:scroll;
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
+  }
+
+  section{
+    min-height:100vh;
+    width:100%;
+    scroll-snap-align:start;
+    scroll-snap-stop: always;
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding: 8vh 8vw;
+  }
+
+  .inner{
+    max-width: 1100px;
+    width:100%;
+  }
+
+  .eyebrow{
+    font-family:'Inter', sans-serif;
+    font-weight:700;
+    font-size: 0.72rem;
+    letter-spacing: 0.32em;
+    text-transform:uppercase;
+    color: var(--ink-soft);
+    margin: 0 0 1.6rem 0;
+    display:flex;
+    align-items:center;
+    gap: 0.8rem;
+  }
+
+  .eyebrow::before{
+    content:"";
+    width: 34px;
+    height:1px;
+    background: currentColor;
+    opacity:0.5;
+  }
+
+  h1,h2,h3{
+    margin:0;
+    font-family:'Inter', sans-serif;
+    font-weight:800;
+    letter-spacing: -0.01em;
+  }
+
+  .accent{
+    font-family:'Playfair Display', serif;
+    font-style: italic;
+    font-weight:600;
+    letter-spacing:0;
+  }
+
+  p{
+    line-height:1.75;
+    font-size: 0.98rem;
+    color: var(--fg);
+    margin: 0 0 1.2rem 0;
+  }
+
+  .reveal{
+    opacity:0;
+    transform: translateY(28px);
+    transition: opacity 1s cubic-bezier(.22,.61,.36,1), transform 1s cubic-bezier(.22,.61,.36,1);
+  }
+  .reveal.visible{
+    opacity:1;
+    transform: translateY(0);
+  }
+  .reveal.d1{ transition-delay: .08s; }
+  .reveal.d2{ transition-delay: .18s; }
+  .reveal.d3{ transition-delay: .28s; }
+  .reveal.d4{ transition-delay: .38s; }
+
+  /* Section 02 — Experience (KLG): make the title land clearly on its own
+     before the body/reels follow, instead of everything popping in together. */
+  #klg .reveal.d1{ transition-delay: .05s; }
+  #klg .reveal.d2{ transition-delay: .55s; }
+  #klg .reveal.d3{ transition-delay: .85s; }
+  #klg .reveal.d4{ transition-delay: 1.15s; }
+
+  .navdots{
+    position:fixed;
+    right: 2.4vw;
+    top:50%;
+    transform: translateY(-50%);
+    display:flex;
+    flex-direction:column;
+    gap: 16px;
+    z-index: 40;
+  }
+  .navdots button{
+    width:9px; height:9px;
+    border-radius:50%;
+    border: 1px solid var(--fg);
+    background: transparent;
+    opacity:0.4;
+    cursor:pointer;
+    padding:0;
+    transition: all .4s ease;
+  }
+  .navdots button.active{
+    opacity:1;
+    background: var(--fg);
+    transform: scale(1.25);
+  }
+
+  .scrolltip{
+    position:absolute;
+    bottom: 4vh;
+    left:50%;
+    transform: translateX(-50%);
+    font-family:'Inter',sans-serif;
+    font-size:0.65rem;
+    letter-spacing:0.28em;
+    text-transform:uppercase;
+    color: var(--ink-soft);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+  }
+  .scrolltip .line{
+    width:1px; height: 34px;
+    background: currentColor;
+    opacity:0.5;
+    animation: dropline 2.4s ease-in-out infinite;
+  }
+  @keyframes dropline{
+    0%{ transform: scaleY(0); transform-origin: top; opacity:0;}
+    40%{ transform: scaleY(1); transform-origin: top; opacity:0.6;}
+    60%{ transform: scaleY(1); transform-origin: bottom; opacity:0.6;}
+    100%{ transform: scaleY(0); transform-origin: bottom; opacity:0;}
+  }
+
+  .floral{
+    position:absolute;
+    pointer-events:none;
+    opacity: 0.55;
+  }
+  .floral svg{ width:100%; height:100%; display:block; }
+  .floral path, .floral ellipse, .floral circle{
+    fill:none;
+    stroke: var(--fg);
+    stroke-width:1.1;
+    stroke-linecap:round;
+  }
+
+  #hero{
+    text-align:center;
+    flex-direction:column;
+  }
+  .floral.tl{ top: -4vh; left: -6vw; width: 34vw; max-width:420px; height: 40vh; }
+  .floral.br{ bottom: -6vh; right: -6vw; width: 30vw; max-width:380px; height: 42vh; }
+
+  .hero-title{
+    font-size: clamp(3.2rem, 9vw, 7rem);
+    line-height: 0.95;
+    display:flex;
+    justify-content:center;
+    align-items:baseline;
+    flex-wrap:wrap;
+    gap: 0.05em;
+  }
+  .hero-title .accent{ font-size: 1.02em; }
+
+  .hero-tags{
+    margin-top: 1.8rem;
+    display:flex;
+    gap:0.6rem;
+    justify-content:center;
+    flex-wrap:wrap;
+    font-family:'Inter',sans-serif;
+  }
+  .hero-tags span{
+    font-size:0.7rem;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    padding: 0.5em 1.1em;
+    border:1px solid var(--line);
+    border-radius: 999px;
+    color: var(--ink-soft);
+  }
+
+  .hero-name{
+    margin-top: 3.4rem;
+    font-family:'Inter', sans-serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.22em;
+    text-transform:uppercase;
+    color: var(--ink-soft);
+  }
+
+  .about-grid{
+    display:grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 6vw;
+    align-items:start;
+  }
+  .about-grid p{ font-size:1.02rem; }
+  .currently-list{
+    list-style:none;
+    margin:0; padding:0;
+    display:flex;
+    flex-direction:column;
+    gap: 1.1rem;
+  }
+  .currently-list li{
+    padding-bottom: 1.1rem;
+    border-bottom: 1px solid var(--line);
+    font-size: 0.92rem;
+  }
+  .currently-list li:last-child{ border-bottom:none; }
+  .currently-list .role{
+    display:block;
+    font-family:'Inter', sans-serif;
+    font-weight:700;
+    letter-spacing: 0.01em;
+    font-size:0.98rem;
+    margin-bottom:0.15rem;
+  }
+  .currently-list .org{ color: var(--ink-soft); }
+
+  .exp-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    flex-wrap:wrap;
+    gap:1rem;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 1.6rem;
+    margin-bottom: 2.2rem;
+  }
+  .exp-head h2{ font-size: clamp(1.8rem, 3.4vw, 2.6rem); }
+  .exp-head .org{
+    font-family:'Playfair Display', serif;
+    font-style:italic;
+    font-size:1.1rem;
+    color: var(--ink-soft);
+  }
+  .exp-body{
+    display:grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 5vw;
+  }
+  .tag-list{
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.5rem;
+    margin-top:1.4rem;
+  }
+  .tag-list span{
+    font-family:'Inter',sans-serif;
+    font-size:0.66rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    padding:0.42em 0.85em;
+    background: var(--cream-soft);
+    border:1px solid var(--line);
+    border-radius:999px;
+    color: var(--ink-soft);
+  }
+  .highlight-list{
+    list-style:none;
+    margin:0; padding:0;
+  }
+  .highlight-list li{
+    position:relative;
+    padding-left: 1.4rem;
+    margin-bottom: 0.85rem;
+    font-size:0.92rem;
+    color: var(--ink-soft);
+  }
+  .highlight-list li::before{
+    content:"—";
+    position:absolute;
+    left:0;
+    color: var(--fg);
+  }
+  .highlight-list strong{ color: var(--fg); font-weight:700; }
+
+  #klg .gallery-wrap{
+    grid-column: 1 / -1;
+    margin-top: 2rem;
+  }
+  #klg .gallery-wrap .gallery-masonry{
+    columns: 4 200px;
+  }
+  @media (max-width: 860px){
+    #klg .gallery-wrap .gallery-masonry{ columns: 2 160px; }
+  }
+
+  .gallery-grid{
+    margin-top: 2.4rem;
+    display:grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.5rem;
+  }
+  .gallery-grid div{
+    aspect-ratio: 4/5;
+    background: linear-gradient(155deg, var(--cream-soft), #e4e0d5);
+    border:1px solid var(--line);
+    border-radius:2px;
+    position:relative;
+    overflow:hidden;
+  }
+  .gallery-grid div::after{
+    content:"";
+    position:absolute; inset:0;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 10px 10px;
+    opacity:0.35;
+  }
+  .gallery-grid div:nth-child(3n){ aspect-ratio: 3/5; }
+  .gallery-note{
+    font-family:'Inter',sans-serif;
+    font-size:0.62rem;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color: var(--ink-soft);
+    margin-top:0.8rem;
+  }
+
+  .musical-list{
+    display:flex;
+    flex-direction:column;
+    gap:1.1rem;
+    margin-top:1.6rem;
+  }
+  .musical-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    border-bottom: 1px solid var(--line);
+    padding-bottom:1rem;
+  }
+  .musical-row .name{
+    font-family:'Playfair Display', serif;
+    font-style:italic;
+    font-size:1.15rem;
+  }
+  .musical-row .role{
+    font-family:'Inter',sans-serif;
+    font-size:0.68rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color: var(--ink-soft);
+  }
+
+  #game{
+    background-image:
+      linear-gradient(90deg, var(--cream) 0%, var(--cream) 34%, rgba(245,243,238,0.55) 55%, rgba(245,243,238,0) 78%),
+      url('assets/images/battle.jpeg');
+    background-size: cover, cover;
+    background-position: center, center right;
+    background-repeat: no-repeat, no-repeat;
+  }
+  #game .exp-body{ grid-template-columns: 1fr; }
+  #game .reveal.d2{ max-width: 540px; }
+
+  @media (max-width: 860px){
+    #game{
+      background-image:
+        linear-gradient(180deg, var(--cream) 0%, var(--cream) 55%, rgba(245,243,238,0.4) 75%, rgba(245,243,238,0) 100%),
+        url('assets/images/battle.jpeg');
+      background-position: center, center top;
+    }
+  }
+
+  #lab{
+    background: linear-gradient(180deg, var(--blue-deep) 0%, var(--blue-mid) 45%, var(--blue-light) 100%);
+    color: var(--blue-light);
+  }
+  #lab .eyebrow{ color: rgba(220,228,242,0.75); }
+  #lab .exp-head{ border-bottom-color: rgba(220,228,242,0.28); }
+  #lab .exp-head .org{ color: rgba(220,228,242,0.75); }
+  #lab p{ color: rgba(230,235,246,0.92); }
+  #lab .tag-list span{
+    background: rgba(255,255,255,0.06);
+    border-color: rgba(220,228,242,0.28);
+    color: rgba(220,228,242,0.85);
+  }
+  .lab-visual{
+    border-radius:4px;
+    overflow:hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.35);
+  }
+  .lab-visual img{
+    width:100%;
+    display:block;
+    filter: saturate(1.05);
+  }
+  .lab-soon{
+    font-family:'Playfair Display', serif;
+    font-style:italic;
+    font-size:1rem;
+    color: rgba(230,235,246,0.7);
+    margin-top:1.6rem;
+  }
+
+  #band{
+    background: #000;
+    color: var(--blue-light);
+  }
+  #band .eyebrow{ color: rgba(220,228,242,0.65); }
+  #band .exp-head{ border-bottom-color: rgba(220,228,242,0.22); }
+  #band .exp-head .org{ color: rgba(220,228,242,0.7); }
+  #band p{ color: rgba(230,230,240,0.9); }
+  #band .highlight-list li{ color: rgba(220,220,232,0.82); }
+  #band .highlight-list li::before{ color: rgba(220,228,242,0.9); }
+  .flower-plate{
+    aspect-ratio: 1152 / 926;
+    border-radius: 4px;
+    overflow:hidden;
+    position:relative;
+    border:1px solid rgba(220,228,242,0.16);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+  }
+  .flower-plate img{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    object-fit: cover;
+    display:block;
+  }
+
+  #contact{ text-align:center; flex-direction:column; }
+  #contact h2{ font-size: clamp(2.4rem, 6vw, 4rem); }
+  #contact .accent{ display:block; }
+  #contact .handle{
+    margin-top:1.6rem;
+    font-family:'Inter',sans-serif;
+    letter-spacing:0.18em;
+    font-size:0.78rem;
+    text-transform:uppercase;
+    color: var(--ink-soft);
+  }
+  #contact .fineprint{
+    margin-top:5rem;
+    font-family:'Inter',sans-serif;
+    font-size:0.62rem;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color: var(--ink-soft);
+    opacity:0.6;
+  }
+
+  @media (max-width: 860px){
+    .about-grid{ grid-template-columns:1fr; gap:3rem; }
+    .exp-body{ grid-template-columns:1fr; gap:2.4rem; }
+    .gallery-grid{ grid-template-columns: repeat(3,1fr); }
+    .navdots{ display:none; }
+    section{ padding: 10vh 7vw; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .reveal{ transition:none; opacity:1; transform:none; }
+    .scrolltip .line{ animation:none; }
+    html{ scroll-behavior:auto; }
+  }
+  /* Masonry gallery grid */
+.gallery-masonry {
+  columns: 2 200px;
+  column-gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .gallery-masonry {
+    columns: 3 200px;
+  }
+}
+
+.gallery-item {
+  break-inside: avoid;
+  margin-bottom: 1rem;
+  border-radius: 0.75rem;
+  overflow: hidden;
+
+  /* initial hidden state — mirrors the framer-motion "hidden" variant */
+  opacity: 0;
+  transform: scale(0.8);
+  filter: blur(10px);
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s ease,
+    filter 0.6s ease;
+}
+
+.gallery-item.visible {
+  opacity: 1;
+  transform: scale(1);
+  filter: blur(0);
+}
+
+.gallery-item img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  border-radius: 0.75rem;
+}
+</style>
+</head>
+<body>
+
+<div class="navdots" id="navdots"></div>
+
+<div class="scroller" id="scroller">
+
+  <section id="hero" data-label="Intro">
+    <div class="floral tl">
+      <svg viewBox="0 0 300 340" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20,320 C40,250 30,180 70,130 C100,90 140,80 150,40" />
+        <path d="M70,130 C50,110 30,110 15,90" />
+        <path d="M90,110 C110,95 120,75 115,50" />
+        <ellipse cx="150" cy="40" rx="26" ry="15" transform="rotate(30 150 40)"/>
+        <ellipse cx="140" cy="20" rx="22" ry="12" transform="rotate(-10 140 20)"/>
+        <ellipse cx="170" cy="30" rx="20" ry="11" transform="rotate(70 170 30)"/>
+      </svg>
+    </div>
+    <div class="floral br">
+      <svg viewBox="0 0 260 320" xmlns="http://www.w3.org/2000/svg">
+        <path d="M240,300 C220,240 230,170 190,120 C165,88 130,80 120,30"/>
+        <ellipse cx="120" cy="30" rx="24" ry="14" transform="rotate(20 120 30)"/>
+        <ellipse cx="105" cy="10" rx="18" ry="10" transform="rotate(-20 105 10)"/>
+        <circle cx="200" cy="150" r="4"/>
+        <circle cx="210" cy="170" r="3"/>
+      </svg>
+    </div>
+
+    <div class="inner reveal visible">
+      <h1 class="hero-title">PORT<span class="accent">folio</span></h1>
+      <div class="hero-tags">
+        <span>Medicine</span>
+        <span>Technology</span>
+        <span>Storytelling</span>
+        <span>Game Dev</span>
+      </div>
+      <div class="hero-name">Sabrina Ruiz Alves</div>
+    </div>
+    <div class="scrolltip"><span class="line"></span>Scroll</div>
+  </section>
+
+  <section id="about" data-label="About">
+    <div class="inner">
+      <div class="eyebrow">01 — About</div>
+      <div class="about-grid">
+        <div class="reveal d1">
+          <p style="font-family:'Playfair Display', serif; font-style:italic; font-size:1.35rem; line-height:1.5; color:var(--ink);">
+            I build ideas where medicine, technology and creative communication meet.
+          </p>
+          <p>
+            My work combines scientific thinking with visual storytelling, digital content
+            and product-oriented problem solving. Whether developing educational content,
+            supporting marketing operations or experimenting with software and game
+            development, I enjoy translating complexity into experiences people understand.
+          </p>
+        </div>
+        <div class="reveal d2">
+          <div class="eyebrow" style="margin-bottom:1.2rem;">Currently</div>
+          <ul class="currently-list">
+            <li><span class="role">Medical Student</span><span class="org">ETH Zürich</span></li>
+            <li><span class="role">Marketing &amp; Administration</span><span class="org">RA Voltaik KLG</span></li>
+            <li><span class="role">Content Creator</span><span class="org">RA Voltaik KLG</span></li>
+            <li><span class="role">Indie Game Developer</span><span class="org">Independent</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="klg" data-label="KLG">
+    <div class="inner">
+      <div class="eyebrow reveal">02 — Experience</div>
+      <div class="exp-head reveal d1">
+        <h2>RA Voltaik <span class="accent">— KLG</span></h2>
+        <span class="org">Renewable energy · solar panel delivery</span>
+      </div>
+      <div class="exp-body">
+        <div class="reveal d2">
+          <p>
+            I supported day-to-day operations in the renewable energy sector, handling
+            administrative workflows, customer communication and documentation to keep
+            solar panel deliveries running smoothly and organised.
+          </p>
+          <p>
+            My special focus, however, was content creation for Instagram and Facebook —
+            growing an audience organically, without any paid advertising budget.
+          </p>
+        </div>
+        <div class="reveal d3">
+          <ul class="highlight-list">
+            <li><strong>2,000+</strong> consistent organic Reel views with only 30 followers</li>
+            <li>Audience reached far beyond the existing follower base</li>
+            <li>Video editing &amp; narrative hooks</li>
+            <li>Trend research &amp; social media strategy</li>
+            <li>AI-assisted video generation</li>
+          </ul>
+          <div class="tag-list">
+            <span>CapCut</span><span>Canva</span><span>Microsoft Office</span><span>Sora</span>
+          </div>
+        </div>
+        <div class="reveal d4 gallery-wrap">
+          <div class="gallery-masonry" id="klg-gallery">
+            <div class="gallery-item"><img src="assets/images/klg-01.png" alt="KLG Reel still 1" loading="lazy"></div>
+            <div class="gallery-item"><img src="assets/images/klg-02.png" alt="KLG Reel still 2" loading="lazy"></div>
+            <div class="gallery-item"><img src="assets/images/klg-03.png" alt="KLG Reel still 3" loading="lazy"></div>
+            <div class="gallery-item"><img src="assets/images/klg-04.png" alt="KLG Reel still 4" loading="lazy"></div>
+            <div class="gallery-item"><img src="assets/images/klg-05.png" alt="KLG Reel still 5" loading="lazy"></div>
+            <div class="gallery-item"><img src="assets/images/klg-06.png" alt="KLG Reel still 6" loading="lazy"></div>
+          </div>
+          <div class="gallery-note">Reel gallery</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="technik" data-label="Technik Crew">
+    <div class="inner">
+      <div class="eyebrow reveal">03 — Experience</div>
+      <div class="exp-head reveal d1">
+        <h2>Technik <span class="accent">Crew</span></h2>
+        <span class="org">Stage sound &amp; lighting</span>
+      </div>
+      <div class="exp-body">
+        <div class="reveal d2">
+          <p>
+            Over 4 years experience in programming and operation of lighting and sound 
+            equipment for live performances — and, on stage, a performer myself. 
+            Over four years spent between the mixing desk and the spotlight in 
+            school musical productions.
+          </p>
+          <div class="musical-list">
+            <div class="musical-row"><span class="name">Peter Pan</span><span class="role">2023 — Dance</span></div>
+            <div class="musical-row"><span class="name">West Side Story</span><span class="role">2023–24 — Dance</span></div>
+            <div class="musical-row"><span class="name">Mamma Mia</span><span class="role">2024–25 — Dance &amp; Singing</span></div>
+            <div class="musical-row"><span class="name">Dorian Gray</span><span class="role">2025 — Sole sound lead</span></div>
+          </div>
+        </div>
+        <div class="reveal d3">
+          <div class="lab-visual">
+            <img src="assets/images/musical.jpeg" alt="performing in the musical Mamma Mia as Lisa.">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="game" data-label="Battle of the Fairies">
+    <div class="inner">
+      <div class="eyebrow reveal">04 — Selected Project</div>
+      <div class="exp-head reveal d1">
+        <h2>Battle of the <span class="accent">Fairies</span></h2>
+        <span class="org">Indie game · self-taught development</span>
+      </div>
+      <div class="exp-body">
+        <div class="reveal d2">
+          <p>
+            An autodidact programming project born from a simple 
+            goal: a fun, freely available and immersive fairy-
+            tale game, scored entirely with classical music -
+            the <em>Dance of the Sugar Plum Fairy</em> and <em>Dance of the
+            Knights</em> — so that a younger generation can discover these pieces
+            through play.
+          </p>
+          <p>
+            Inspired by <em>Sleeping Beauty</em> and Tchaikovsky's score. 
+            Completely free to play, with no ads, on itch.io — 
+            for browser, Windows and Android.
+          </p>
+          <div class="tag-list">
+            <span>Python</span><span>Java</span><span>JavaScript</span><span>HTML</span>
+            <span>Claude Code</span><span>Codex</span><span>Nano Banana</span><span>Picsart</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="lab" data-label="Lab">
+    <div class="inner">
+      <div class="eyebrow reveal">05 — Project</div>
+      <div class="exp-head reveal d1">
+        <h2>Student Project <span class="accent">House</span></h2>
+        <span class="org">Lab</span>
+      </div>
+      <div class="exp-body">
+        <div class="reveal d2">
+          <p>Yet to come.</p>
+          <p>A new chapter, currently taking shape — details will follow soon.</p>
+          <div class="lab-soon">More coming soon</div>
+        </div>
+        <div class="reveal d3">
+          <div class="lab-visual">
+            <img src="assets/images/Lab.jpeg" alt="Laboratory glassware in blue gradient light">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="band" data-label="Queen of the Night">
+    <div class="inner">
+      <div class="eyebrow reveal">06 — Project</div>
+      <div class="exp-head reveal d1">
+        <h2>Queen of the <span class="accent">Night</span></h2>
+        <span class="org">Symphonic metal</span>
+      </div>
+      <div class="exp-body">
+        <div class="reveal d2">
+          <p>
+            Building the visual identity, branding and artistic concept of the
+            symphonic metal project Queen of the Night — named after the striking
+            <em>Dama da Noite</em> flower, which lends the project its nocturnal,
+            blooming imagery.
+          </p>
+          <p>
+            As lead vocalist, I compose and perform the lyrics and melodies that
+            carry the project's voice.
+          </p>
+          <ul class="highlight-list">
+            <li>Visual identity &amp; branding direction</li>
+            <li>Songwriting — lyrics &amp; melody</li>
+            <li>Lead vocals</li>
+          </ul>
+        </div>
+        <div class="reveal d3">
+          <div class="flower-plate">
+            <img src="assets/images/night.png" alt="Queen of the Night — nocturnal branding artwork">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" data-label="Contact">
+    <div class="inner reveal">
+      <div class="eyebrow" style="justify-content:center;">07 — Get in touch</div>
+      <h2>Let's build the next<span class="accent">idea, together.</span></h2>
+      <div class="handle">sabrinaruizalves@gmail.com</div>
+      <div class="fineprint">Sabrina Ruiz Alves — Portfolio</div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  
+  (function () {
+    const gallery = document.getElementById('klg-gallery');
+    if (!gallery) return;
+
+    const items = gallery.querySelectorAll('.gallery-item');
+    const staggerMs = 90; // matches staggerChildren: 0.09 in the React version
+
+    const observer = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            items.forEach((item, i) => {
+              setTimeout(() => item.classList.add('visible'), i * staggerMs);
+            });
+            obs.unobserve(entry.target); // "once: true" behavior
+          }
+        });
+      },
+      { root: null, rootMargin: '0px 0px -100px 0px', threshold: 0.03 }
+    );
+
+    observer.observe(gallery);
+  })(); 
+
+  const scroller = document.getElementById('scroller');
+  const sections = Array.from(document.querySelectorAll('section'));
+  const navdots = document.getElementById('navdots');
+
+  sections.forEach((sec, i) => {
+    const btn = document.createElement('button');
+    btn.setAttribute('aria-label', sec.dataset.label || ('Section ' + (i+1)));
+    btn.addEventListener('click', () => sec.scrollIntoView({behavior:'smooth'}));
+    navdots.appendChild(btn);
+  });
+  const dotButtons = Array.from(navdots.children);
+
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { root: scroller, threshold: 0.35 });
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+  const sectionObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const idx = sections.indexOf(entry.target);
+      if (entry.isIntersecting && entry.intersectionRatio > 0.55) {
+        dotButtons.forEach(b => b.classList.remove('active'));
+        if (dotButtons[idx]) dotButtons[idx].classList.add('active');
+
+        if (entry.target.id === 'lab') {
+          document.body.style.background = '#33418c';
+        } else if (entry.target.id === 'band') {
+          document.body.style.background = '#000000';
+        } else {
+          document.body.style.background = '#f5f3ee';
+        }
+      }
+    });
+  }, { root: scroller, threshold: [0.55] });
+  sections.forEach(sec => sectionObserver.observe(sec));
+</script>
+
+</body>
+</html>
