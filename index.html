@@ -20,6 +20,9 @@
     --blue-light:#dce4f2;
     --aubergine:#2e2438;
     --aubergine-soft:#4a3a56;
+    --plum:#5a2a4c;
+    --teddy-warm:#f7f1ea;
+    --teddy-accent:#a8533f;
     --bg: var(--cream);
     --fg: var(--ink);
   }
@@ -151,6 +154,28 @@
     background: var(--fg);
     transform: scale(1.25);
   }
+  .navdots button:hover{ opacity:0.9; transform: scale(1.25); }
+  .navdots button:focus-visible{ outline:1px solid var(--fg); outline-offset:4px; }
+  /* label on hover so the dots are navigable, not guesswork */
+  .navdots button::after{
+    content: attr(data-label);
+    position:absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family:'Inter',sans-serif;
+    font-size:0.58rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    white-space:nowrap;
+    color: var(--fg);
+    opacity:0;
+    pointer-events:none;
+    transition: opacity .35s ease;
+  }
+  .navdots button{ position:relative; }
+  .navdots button:hover::after,
+  .navdots button:focus-visible::after{ opacity:0.75; }
 
   .scrolltip{
     position:absolute;
@@ -326,6 +351,83 @@
   }
   .highlight-list strong{ color: var(--fg); font-weight:700; }
 
+  /* --- "still ongoing" badge ------------------------------------------- */
+  .now-badge{
+    font-family:'Inter',sans-serif;
+    font-weight:700;
+    font-style:normal;
+    font-size:0.6rem;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    display:inline-flex;
+    align-items:center;
+    gap:0.5em;
+    padding:0.42em 0.85em;
+    border:1px solid var(--line);
+    border-radius:999px;
+    background: var(--cream-soft);
+    color: var(--ink-soft);
+    vertical-align: middle;
+    white-space:nowrap;
+  }
+  .now-badge::before{
+    content:"";
+    width:6px; height:6px;
+    border-radius:50%;
+    background: #2f7d5b;
+    box-shadow: 0 0 0 0 rgba(47,125,91,0.45);
+    animation: pulse-now 2.6s ease-out infinite;
+  }
+  @keyframes pulse-now{
+    0%{ box-shadow: 0 0 0 0 rgba(47,125,91,0.45); }
+    70%{ box-shadow: 0 0 0 7px rgba(47,125,91,0); }
+    100%{ box-shadow: 0 0 0 0 rgba(47,125,91,0); }
+  }
+  .currently-list .now-badge{ margin-left:0.6rem; }
+
+  /* --- a quiet note under a list --------------------------------------- */
+  .list-note{
+    font-family:'Playfair Display', serif;
+    font-style:italic;
+    font-size:0.95rem;
+    line-height:1.6;
+    color: var(--ink-soft);
+    margin-top:1.4rem;
+    padding-left:1rem;
+    border-left:1px solid var(--line);
+  }
+
+  /* --- outbound link, used for itch.io / the Lego page ----------------- */
+  .link-out{
+    display:inline-flex;
+    align-items:center;
+    gap:0.7em;
+    margin-top:0.4rem;
+    font-family:'Inter',sans-serif;
+    font-weight:700;
+    font-size:0.7rem;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    text-decoration:none;
+    color: var(--ink);
+    padding:0.9em 1.5em;
+    border:1px solid var(--ink);
+    border-radius:999px;
+    background: transparent;
+    transition: background .45s cubic-bezier(.22,.61,.36,1), color .45s ease, transform .45s cubic-bezier(.22,.61,.36,1);
+  }
+  .link-out .arrow{
+    display:inline-block;
+    transition: transform .45s cubic-bezier(.22,.61,.36,1);
+  }
+  .link-out:hover{
+    background: var(--ink);
+    color: var(--cream);
+    transform: translateY(-2px);
+  }
+  .link-out:hover .arrow{ transform: translate(3px,-3px); }
+  .link-out:focus-visible{ outline:2px solid var(--ink); outline-offset:4px; }
+
   #klg .gallery-wrap{
     grid-column: 1 / -1;
     margin-top: 2rem;
@@ -397,23 +499,200 @@
   }
 
   #game{
+    /* the cream hold is pushed further right so the text sits fully on
+       the light side and the fade into the artwork starts later */
     background-image:
-      linear-gradient(90deg, var(--cream) 0%, var(--cream) 34%, rgba(245,243,238,0.55) 55%, rgba(245,243,238,0) 78%),
+      linear-gradient(90deg,
+        var(--cream) 0%,
+        var(--cream) 52%,
+        rgba(245,243,238,0.88) 64%,
+        rgba(245,243,238,0.5) 76%,
+        rgba(245,243,238,0) 92%),
       url('assets/images/battle.jpeg');
     background-size: cover, cover;
     background-position: center, center right;
     background-repeat: no-repeat, no-repeat;
   }
   #game .exp-body{ grid-template-columns: 1fr; }
-  #game .reveal.d2{ max-width: 540px; }
+  #game .reveal.d2{ max-width: 560px; }
+  #game .exp-head{
+    /* stacked, and kept on the cream half so nothing sits over the artwork */
+    max-width: min(640px, 48vw);
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.9rem;
+  }
+  #game .exp-head h2{ font-size: clamp(2rem, 3.8vw, 2.9rem); }
+  #game .exp-head .org{
+    /* was near-invisible against the cream — deep plum reads clearly */
+    color: var(--plum);
+    font-style:italic;
+    font-size:1.05rem;
+    letter-spacing:0.01em;
+  }
+  #game p{
+    font-size: 1.04rem;
+    line-height: 1.85;
+    color: var(--ink);
+    max-width: 34em;
+  }
+  #game p em{
+    font-family:'Playfair Display', serif;
+    font-style:italic;
+    color: var(--plum);
+    font-size:1.04em;
+  }
+  #game .tag-list span{ background: rgba(255,255,255,0.72); }
 
   @media (max-width: 860px){
+    #game .exp-head{ max-width:none; }
     #game{
       background-image:
-        linear-gradient(180deg, var(--cream) 0%, var(--cream) 55%, rgba(245,243,238,0.4) 75%, rgba(245,243,238,0) 100%),
+        linear-gradient(180deg, var(--cream) 0%, var(--cream) 62%, rgba(245,243,238,0.5) 82%, rgba(245,243,238,0) 100%),
         url('assets/images/battle.jpeg');
       background-position: center, center top;
     }
+  }
+
+  /* --- 04 Young Engineers ---------------------------------------------
+     This section is three screens tall: the content pins while you scroll
+     past it, and that travel is what drives the brick build. The scroller's
+     mandatory snap is switched off by JS while you are inside it. */
+  #lego{
+    min-height: 300vh;
+    display:block;
+    padding:0;
+  }
+  .lego-sticky{
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding: 8vh 8vw;
+  }
+  #lego .exp-body{ grid-template-columns: 1.1fr 0.9fr; align-items:center; }
+
+  /* "Scroll to build" — fades away once the first brick is on its way */
+  .brick-hint{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap: 0.9rem;
+    margin-top: 0.4rem;
+    font-family:'Inter',sans-serif;
+    font-size:0.62rem;
+    letter-spacing:0.28em;
+    text-transform:uppercase;
+    color: var(--ink-soft);
+    transition: opacity .6s ease, transform .6s cubic-bezier(.22,.61,.36,1);
+  }
+  .brick-hint .line{
+    width:1px; height:26px;
+    background: currentColor;
+    opacity:0.5;
+    animation: dropline 2.4s ease-in-out infinite;
+  }
+  .brick-hint.gone{
+    opacity:0;
+    transform: translateY(6px);
+    pointer-events:none;
+  }
+  /* thin bar that fills as the bridge comes together */
+  .brick-progress{
+    width: min(220px, 60%);
+    height:1px;
+    margin: 1.1rem auto 0;
+    background: var(--line);
+    position:relative;
+  }
+  .brick-progress span{
+    position:absolute;
+    inset:0 auto 0 0;
+    width:0%;
+    background: var(--ink);
+    transition: width .12s linear;
+  }
+
+  /* the three.js stage that the bricks fall into */
+  .brick-stage{
+    position:relative;
+    width:100%;
+    aspect-ratio: 1 / 1;
+    max-height: 54vh;
+  }
+  #brick-canvas{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    display:block;
+    opacity:0;
+    transition: opacity .8s ease;
+  }
+  .brick-stage.live #brick-canvas{ opacity:1; }
+  /* the CSS bricks stay as the fallback when WebGL isn't available */
+  .brick-stage .brick-trio{
+    position:absolute;
+    inset:0;
+    justify-content:center;
+  }
+  .brick-stage.live .brick-trio{ display:none; }
+
+  .brick-trio{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap: 2.1rem;
+    padding: 1rem 0;
+  }
+  .brick{
+    --b:#e8b021;
+    position:relative;
+    width: 128px;
+    height: 58px;
+    background: var(--b);
+    border-radius: 7px;
+    box-shadow:
+      inset 0 -7px 0 rgba(0,0,0,0.13),
+      inset 0 3px 0 rgba(255,255,255,0.22),
+      0 14px 26px rgba(25,24,15,0.16);
+    animation: brick-float 5.5s ease-in-out infinite;
+  }
+  .brick .stud{
+    position:absolute;
+    top:-11px;
+    width: 32px;
+    height: 13px;
+    background: var(--b);
+    border-radius: 6px 6px 2px 2px;
+    box-shadow: inset 0 -4px 0 rgba(0,0,0,0.10);
+  }
+  .brick .stud.s1{ left: 20px; }
+  .brick .stud.s2{ right: 20px; }
+  .brick.yellow{ --b:#f0b429; animation-delay: 0s; }
+  .brick.green{ --b:#3f9b5c; animation-delay: .45s; margin-left: 2.4rem; }
+  .brick.red{ --b:#c8412f; animation-delay: .9s; margin-right: 2.4rem; }
+  @keyframes brick-float{
+    0%,100%{ transform: translateY(0) rotate(0deg); }
+    50%{ transform: translateY(-9px) rotate(-1.2deg); }
+  }
+
+  /* --- 05 Teddybärspital ----------------------------------------------- */
+  #teddy{ background: var(--teddy-warm); }
+  #teddy .exp-head .org{ color: var(--teddy-accent); }
+  #teddy .highlight-list li::before{ color: var(--teddy-accent); }
+  #teddy .tag-list span{ background: #fff; }
+  .photo-frame{
+    border-radius: 4px;
+    overflow:hidden;
+    box-shadow: 0 24px 60px rgba(25,24,15,0.16);
+  }
+  .photo-frame img{
+    width:100%;
+    display:block;
+    filter: saturate(1.02);
   }
 
   #lab{
@@ -457,6 +736,44 @@
   #band p{ color: rgba(230,230,240,0.9); }
   #band .highlight-list li{ color: rgba(220,220,232,0.82); }
   #band .highlight-list li::before{ color: rgba(220,228,242,0.9); }
+  /* .highlight-list strong defaults to --ink, which is invisible on black */
+  #band .highlight-list strong{ color: #fff; }
+  #lab .highlight-list li{ color: rgba(230,235,246,0.85); }
+  #lab .highlight-list strong{ color: #fff; }
+  #lab .highlight-list li::before{ color: rgba(220,228,242,0.9); }
+  #band .badge-quiet{
+    background: rgba(255,255,255,0.06);
+    border-color: rgba(220,228,242,0.26);
+    color: rgba(220,228,242,0.8);
+  }
+  #band .list-note{
+    color: rgba(220,228,242,0.72);
+    border-left-color: rgba(220,228,242,0.22);
+  }
+  #band .tag-list span{
+    background: rgba(255,255,255,0.05);
+    border-color: rgba(220,228,242,0.24);
+    color: rgba(220,228,242,0.82);
+  }
+
+  /* a badge without the "live" dot — for states that are not ongoing work */
+  .badge-quiet{
+    font-family:'Inter',sans-serif;
+    font-weight:700;
+    font-style:normal;
+    font-size:0.6rem;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    display:inline-flex;
+    align-items:center;
+    padding:0.42em 0.85em;
+    border:1px solid var(--line);
+    border-radius:999px;
+    background: var(--cream-soft);
+    color: var(--ink-soft);
+    vertical-align: middle;
+    white-space:nowrap;
+  }
   .flower-plate{
     aspect-ratio: 1152 / 926;
     border-radius: 4px;
@@ -496,14 +813,38 @@
   @media (max-width: 860px){
     .about-grid{ grid-template-columns:1fr; gap:3rem; }
     .exp-body{ grid-template-columns:1fr; gap:2.4rem; }
+    #lego{ min-height: 260vh; }
+    /* everything has to fit inside the pinned screen, so this one is tighter,
+       and it aligns to the top so the heading is never the part that is cut */
+    .lego-sticky{ padding: 5vh 7vw; align-items: flex-start; }
+    .brick-progress{ display:none; }
+    #lego .exp-body{ grid-template-columns:1fr; gap:1.1rem; }
+    #lego .exp-head{ padding-bottom:1rem; margin-bottom:1.2rem; }
+    #lego p{ margin-bottom:0.9rem; }
+    #lego .highlight-list li{ margin-bottom:0.5rem; }
+    /* stacked under the text, so the stage gets wide and short instead of square */
+    .brick-stage{ aspect-ratio: 4 / 3; max-height: 26vh; }
+    .brick-hint{ margin-top:0.2rem; }
+    .brick-progress{ margin-top:0.8rem; }
+    .brick-trio{ gap:1.6rem; }
+    .brick{ width: 108px; height: 50px; }
     .gallery-grid{ grid-template-columns: repeat(3,1fr); }
     .navdots{ display:none; }
     section{ padding: 10vh 7vw; }
   }
 
+  /* short windows (landscape phones, small laptops): shrink the stage first */
+  @media (max-height: 640px){
+    .brick-stage{ max-height: 30vh; }
+    .brick-hint{ margin-top:0; }
+  }
+
   @media (prefers-reduced-motion: reduce){
     .reveal{ transition:none; opacity:1; transform:none; }
     .scrolltip .line{ animation:none; }
+    .brick{ animation:none; }
+    .now-badge::before{ animation:none; }
+    .gallery-item{ transition:none; opacity:1; transform:none; filter:none; }
     html{ scroll-behavior:auto; }
   }
   /* Masonry gallery grid */
@@ -547,6 +888,51 @@
   height: auto;
   object-fit: contain;
   border-radius: 0.75rem;
+}
+
+/* the link inside does its own clipping, and the hover lift needs room */
+.gallery-item:has(.gallery-link){ overflow: visible; }
+
+/* each reel still links out to the matching post on Instagram */
+.gallery-link{
+  display:block;
+  position:relative;
+  border-radius: 0.75rem;
+  overflow:hidden;
+  text-decoration:none;
+  transition: transform .5s cubic-bezier(.22,.61,.36,1), box-shadow .5s ease;
+}
+.gallery-link img{ transition: transform .7s cubic-bezier(.22,.61,.36,1), filter .5s ease; }
+.gallery-link:hover{
+  transform: translateY(-4px);
+  box-shadow: 0 18px 40px rgba(25,24,15,0.18);
+}
+.gallery-link:hover img{ transform: scale(1.035); }
+.gallery-link:focus-visible{ outline:2px solid var(--ink); outline-offset:3px; }
+.gallery-link .watch{
+  position:absolute;
+  inset:auto 0 0 0;
+  display:flex;
+  align-items:center;
+  gap:0.45em;
+  padding: 1.6rem 0.8rem 0.7rem;
+  font-family:'Inter',sans-serif;
+  font-size:0.58rem;
+  font-weight:700;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  color:#fff;
+  background: linear-gradient(0deg, rgba(20,18,12,0.72), rgba(20,18,12,0));
+  opacity:0;
+  transform: translateY(6px);
+  transition: opacity .45s ease, transform .45s cubic-bezier(.22,.61,.36,1);
+}
+.gallery-link:hover .watch,
+.gallery-link:focus-visible .watch{ opacity:1; transform: translateY(0); }
+.gallery-link .watch svg{ width:13px; height:13px; flex:0 0 auto; }
+
+@media (hover: none){
+  .gallery-link .watch{ opacity:1; transform:none; }
 }
 </style>
 </head>
@@ -600,7 +986,7 @@
           </p>
           <p>
             My work combines scientific thinking with visual storytelling, digital content
-            and product-oriented problem solving. Whether developing educational content,
+            and product-oriented problem solving. Whether teaching science to kindergardeners,
             supporting marketing operations or experimenting with software and game
             development, I enjoy translating complexity into experiences people understand.
           </p>
@@ -610,7 +996,8 @@
           <ul class="currently-list">
             <li><span class="role">Medical Student</span><span class="org">ETH Zürich</span></li>
             <li><span class="role">Marketing &amp; Administration</span><span class="org">RA Voltaik KLG</span></li>
-            <li><span class="role">Content Creator</span><span class="org">RA Voltaik KLG</span></li>
+            <li><span class="role">Content Creator</span><span class="org">RA Voltaik KLG and Health Science Club ETH</span></li>
+            <li><span class="role">Lego Instructor</span><span class="org">Young Engineers CH</span></li>
             <li><span class="role">Indie Game Developer</span><span class="org">Independent</span></li>
           </ul>
         </div>
@@ -623,40 +1010,91 @@
       <div class="eyebrow reveal">02 — Experience</div>
       <div class="exp-head reveal d1">
         <h2>RA Voltaik <span class="accent">— KLG</span></h2>
-        <span class="org">Renewable energy · solar panel delivery</span>
+        <span class="org">
+          Renewable energy · solar panel delivery
+          <span class="now-badge">Ongoing role</span>
+        </span>
       </div>
       <div class="exp-body">
         <div class="reveal d2">
           <p>
-            I supported day-to-day operations in the renewable energy sector, handling
+            I support day-to-day operations in the renewable energy sector, handling
             administrative workflows, customer communication and documentation to keep
             solar panel deliveries running smoothly and organised.
           </p>
           <p>
-            My special focus, however, was content creation for Instagram and Facebook —
+            My special focus, however, is content creation for Instagram and Facebook —
             growing an audience organically, without any paid advertising budget.
           </p>
         </div>
         <div class="reveal d3">
           <ul class="highlight-list">
-            <li><strong>2,000+</strong> consistent organic Reel views with only 30 followers</li>
+            <li><strong>2,000+</strong> organic Reel views with only 30 followers</li>
             <li>Audience reached far beyond the existing follower base</li>
             <li>Video editing &amp; narrative hooks</li>
             <li>Trend research &amp; social media strategy</li>
             <li>AI-assisted video generation</li>
           </ul>
           <div class="tag-list">
-            <span>CapCut</span><span>Canva</span><span>Microsoft Office</span><span>Sora</span>
+            <span>CapCut</span><span>Canva</span><span>Microsoft Office</span><span>Sora</span><span>Comfy UI</span>
           </div>
         </div>
         <div class="reveal d4 gallery-wrap">
           <div class="gallery-masonry" id="klg-gallery">
-            <div class="gallery-item"><img src="assets/images/klg-01.png" alt="KLG Reel still 1" loading="lazy"></div>
-            <div class="gallery-item"><img src="assets/images/klg-02.png" alt="KLG Reel still 2" loading="lazy"></div>
-            <div class="gallery-item"><img src="assets/images/klg-03.png" alt="KLG Reel still 3" loading="lazy"></div>
-            <div class="gallery-item"><img src="assets/images/klg-04.png" alt="KLG Reel still 4" loading="lazy"></div>
-            <div class="gallery-item"><img src="assets/images/klg-05.png" alt="KLG Reel still 5" loading="lazy"></div>
-            <div class="gallery-item"><img src="assets/images/klg-06.png" alt="KLG Reel still 6" loading="lazy"></div>
+            <div class="gallery-item">
+              <a class="gallery-link" href="https://www.instagram.com/ra.voltaik?stkn=Nms1N3VoZTZ5dGx0&amp;utm_source=qr" target="_blank" rel="noopener noreferrer">
+                <img src="assets/images/klg-01.png" alt="RA Voltaik Reel still — opens the Instagram profile" loading="lazy">
+                <span class="watch">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5.4"/><circle cx="12" cy="12" r="4.3"/><circle cx="17.7" cy="6.3" r="1.2" fill="currentColor" stroke="none"/></svg>
+                  Profile
+                </span>
+              </a>
+            </div>
+            <div class="gallery-item">
+              <a class="gallery-link" href="https://www.instagram.com/reel/DXFJhUxoM6P/?stkn=YzgwdTU2bWt6ZGsz" target="_blank" rel="noopener noreferrer">
+                <img src="assets/images/klg-02.png" alt="RA Voltaik Reel still — opens the Reel on Instagram" loading="lazy">
+                <span class="watch">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5.4"/><circle cx="12" cy="12" r="4.3"/><circle cx="17.7" cy="6.3" r="1.2" fill="currentColor" stroke="none"/></svg>
+                  Watch Reel
+                </span>
+              </a>
+            </div>
+            <div class="gallery-item">
+              <a class="gallery-link" href="https://www.instagram.com/reel/Damm4n_gu7p/?stkn=MXZ6ejlmYng1eTR2Nw==" target="_blank" rel="noopener noreferrer">
+                <img src="assets/images/klg-03.png" alt="RA Voltaik Reel still — opens the Reel on Instagram" loading="lazy">
+                <span class="watch">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5.4"/><circle cx="12" cy="12" r="4.3"/><circle cx="17.7" cy="6.3" r="1.2" fill="currentColor" stroke="none"/></svg>
+                  Watch Reel
+                </span>
+              </a>
+            </div>
+            <div class="gallery-item">
+              <a class="gallery-link" href="https://www.instagram.com/reel/DaAEt3zD5H_/?stkn=MWxqemFzdXRidmQwMA==" target="_blank" rel="noopener noreferrer">
+                <img src="assets/images/klg-04.png" alt="RA Voltaik Reel still — opens the Reel on Instagram" loading="lazy">
+                <span class="watch">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5.4"/><circle cx="12" cy="12" r="4.3"/><circle cx="17.7" cy="6.3" r="1.2" fill="currentColor" stroke="none"/></svg>
+                  Watch Reel
+                </span>
+              </a>
+            </div>
+            <div class="gallery-item">
+              <a class="gallery-link" href="https://www.instagram.com/reel/DYw9UPAlTVu/?stkn=YWtidHBwc3F5bzVo" target="_blank" rel="noopener noreferrer">
+                <img src="assets/images/klg-05.png" alt="RA Voltaik Reel still — opens the Reel on Instagram" loading="lazy">
+                <span class="watch">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5.4"/><circle cx="12" cy="12" r="4.3"/><circle cx="17.7" cy="6.3" r="1.2" fill="currentColor" stroke="none"/></svg>
+                  Watch Reel
+                </span>
+              </a>
+            </div>
+            <div class="gallery-item">
+              <a class="gallery-link" href="https://www.instagram.com/p/DakRBpdiCtu/?img_index=1&amp;stkn=MTIxZ3M3bXZ2bnlybg==" target="_blank" rel="noopener noreferrer">
+                <img src="assets/images/klg-06.png" alt="RA Voltaik post still — opens the post on Instagram" loading="lazy">
+                <span class="watch">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5.4"/><circle cx="12" cy="12" r="4.3"/><circle cx="17.7" cy="6.3" r="1.2" fill="currentColor" stroke="none"/></svg>
+                  See post
+                </span>
+              </a>
+            </div>
           </div>
           <div class="gallery-note">Reel gallery</div>
         </div>
@@ -674,16 +1112,20 @@
       <div class="exp-body">
         <div class="reveal d2">
           <p>
-            Over 4 years experience in programming and operation of lighting and sound 
-            equipment for live performances — and, on stage, a performer myself. 
-            Over four years spent between the mixing desk and the spotlight in 
+            Over 4 years experience in programming and operation of lighting and sound
+            equipment for live performances — and, on stage, a performer myself.
+            Over four years spent between the mixing desk and the spotlight in
             school musical productions.
           </p>
+          <div class="eyebrow" style="margin: 2rem 0 0.2rem 0;">Personal highlights</div>
           <div class="musical-list">
             <div class="musical-row"><span class="name">Peter Pan</span><span class="role">2023 — Dance</span></div>
             <div class="musical-row"><span class="name">West Side Story</span><span class="role">2023–24 — Dance</span></div>
             <div class="musical-row"><span class="name">Mamma Mia</span><span class="role">2024–25 — Dance &amp; Singing</span></div>
             <div class="musical-row"><span class="name">Dorian Gray</span><span class="role">2025 — Sole sound lead</span></div>
+          </div>
+          <div class="list-note">
+            ...and many more
           </div>
         </div>
         <div class="reveal d3">
@@ -695,9 +1137,80 @@
     </div>
   </section>
 
+  <section id="lego" data-label="Young Engineers">
+   <div class="lego-sticky">
+    <div class="inner">
+      <div class="eyebrow reveal">04 — Experience</div>
+      <div class="exp-head reveal d1">
+        <h2>Young <span class="accent">Engineers</span></h2>
+        <span class="org">
+          Lego Instructor teaching STEM for kids
+          <span class="now-badge">Ongoing role</span>
+        </span>
+      </div>
+      <div class="exp-body">
+        <div class="reveal d2">
+          <p>
+            I teach engineering and physics weekly to children through Lego by helping them build for eg. gears,
+            levers, pulleys, bridges, balance and motion.
+          </p>
+          <ul class="highlight-list">
+            <li>Teaching physics &amp; engineering basics, ages 3 to 6</li>
+            <li>Group facilitation &amp; classroom energy management</li>
+            <li>Explaining complexity in a child's vocabulary</li>
+          </ul>
+        </div>
+        <div class="reveal d3">
+          <div class="brick-stage" id="brick-stage" aria-hidden="true">
+            <canvas id="brick-canvas"></canvas>
+            <div class="brick-trio">
+              <div class="brick yellow"><span class="stud s1"></span><span class="stud s2"></span></div>
+              <div class="brick green"><span class="stud s1"></span><span class="stud s2"></span></div>
+              <div class="brick red"><span class="stud s1"></span><span class="stud s2"></span></div>
+            </div>
+          </div>
+          <div class="brick-hint" id="brick-hint"><span class="line"></span>Scroll to build</div>
+          <div class="brick-progress" aria-hidden="true"><span id="brick-progress-fill"></span></div>
+        </div>
+      </div>
+    </div>
+   </div>
+  </section>
+
+  <section id="teddy" data-label="Teddybärspital">
+    <div class="inner">
+      <div class="eyebrow reveal">05 — Volunteering</div>
+      <div class="exp-head reveal d1">
+        <h2>Teddybär<span class="accent">spital</span></h2>
+        <span class="org">Medicine without fear</span>
+      </div>
+      <div class="exp-body">
+        <div class="reveal d2">
+          <p>
+            I took part in the <em>Teddybärspital</em> (Teddy Bear Hospital), where children
+            aged 4 to 8 bring in their teddy bears as patients. Volunteering medical
+            students then treat the bear: taking its history, listening to its heart,
+            plastering a broken paw, giving it a vaccination, bandaging, X-raying.
+          </p>
+          <ul class="highlight-list">
+            <li>Consultations with children aged <strong>4–8</strong> and their bears</li>
+            <li>Plaster casts, bandages, vaccinations &amp; check-ups — on the teddy</li>
+            <li>Explaining medicine at a child's eye level</li>
+            <li>Reducing fear of doctors through play</li>
+          </ul>
+        </div>
+        <div class="reveal d3">
+          <div class="photo-frame">
+            <img src="assets/images/teddybear_hospital.jpg" alt="Teddybärspital — a teddy bear being treated by student volunteers">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section id="game" data-label="Battle of the Fairies">
     <div class="inner">
-      <div class="eyebrow reveal">04 — Selected Project</div>
+      <div class="eyebrow reveal">06 — Selected Project</div>
       <div class="exp-head reveal d1">
         <h2>Battle of the <span class="accent">Fairies</span></h2>
         <span class="org">Indie game · self-taught development</span>
@@ -705,22 +1218,27 @@
       <div class="exp-body">
         <div class="reveal d2">
           <p>
-            An autodidact programming project born from a simple 
-            goal: a fun, freely available and immersive fairy-
-            tale game, scored entirely with classical music -
-            the <em>Dance of the Sugar Plum Fairy</em> and <em>Dance of the
-            Knights</em> — so that a younger generation can discover these pieces
-            through play.
+            An autodidact programming project born from a simple goal: a fun, freely
+            available and immersive fairytale game, scored entirely with classical
+            music — the <em>Dance of the Sugar Plum Fairy</em> and
+            <em>Dance of the Knights</em> — so that a younger generation can discover
+            these pieces through play.
           </p>
           <p>
-            Inspired by <em>Sleeping Beauty</em> and Tchaikovsky's score. 
-            Completely free to play, with no ads, on itch.io — 
-            for browser, Windows and Android.
+            Inspired by <em>Sleeping Beauty</em> and Tchaikovsky's score.
+            Completely free to play, with no ads, on itch.io —
+            for browser and Windows.
           </p>
           <div class="tag-list">
             <span>Python</span><span>Java</span><span>JavaScript</span><span>HTML</span>
             <span>Claude Code</span><span>Codex</span><span>Nano Banana</span><span>Picsart</span>
           </div>
+          <p style="margin-top:2rem;">
+            <a class="link-out" href="https://sabrain.itch.io/battle-of-the-fairies" target="_blank" rel="noopener noreferrer">
+              Play — Battle of the Fairies by SaBrain
+              <span class="arrow" aria-hidden="true">↗</span>
+            </a>
+          </p>
         </div>
       </div>
     </div>
@@ -728,15 +1246,15 @@
 
   <section id="lab" data-label="Lab">
     <div class="inner">
-      <div class="eyebrow reveal">05 — Project</div>
+      <div class="eyebrow reveal">07 — Project</div>
       <div class="exp-head reveal d1">
-        <h2>Lab <span class="accent">Work</span></h2>
-        <span class="org">Lab</span>
+        <h2>Student Project <span class="accent">House</span></h2>
+        <span class="org">Life Science Lab</span>
       </div>
       <div class="exp-body">
         <div class="reveal d2">
-          <p>Yet to come.</p>
-          <p>A new chapter, currently taking shape — details will follow soon.</p>
+          <p>Self-initiated project applying concepts from MIT's "How to Grow (Almost) Anything" course (followed as an extracurricular/global listener);
+            current project idea includes transforming bacteria with plasmids encoding fluorescent proteins, and culturing them to explore synthetic biology and cloning techniques.</p>
           <div class="lab-soon">More coming soon</div>
         </div>
         <div class="reveal d3">
@@ -748,34 +1266,32 @@
     </div>
   </section>
 
-  <section id="band" data-label="Queen of the Night">
+  <section id="band" data-label="Metal Band">
     <div class="inner">
-      <div class="eyebrow reveal">06 — Project</div>
+      <div class="eyebrow reveal">08 — Project</div>
       <div class="exp-head reveal d1">
-        <h2>Queen of the <span class="accent">Night</span></h2>
-        <span class="org">Symphonic metal</span>
+        <h2>Metal <span class="accent">Band</span></h2>
+        <span class="org">
+          Symphonic metal
+          <span class="badge-quiet">No name yet</span>
+        </span>
       </div>
       <div class="exp-body">
         <div class="reveal d2">
           <p>
-            Building the visual identity, branding and artistic concept of the
-            symphonic metal project Queen of the Night — named after the striking
-            <em>Dama da Noite</em> flower, which lends the project its nocturnal,
-            blooming imagery.
+            A symphonic metal band that is <strong>just getting started</strong>.
           </p>
-          <p>
-            As lead vocalist, I compose and perform the lyrics and melodies that
-            carry the project's voice.
-          </p>
+          <p>My role in it:</p>
           <ul class="highlight-list">
-            <li>Visual identity &amp; branding direction</li>
-            <li>Songwriting — lyrics &amp; melody</li>
-            <li>Lead vocals</li>
+            <li><strong>Visual identity &amp; branding direction</strong></li>
+            <li><strong>Songwriting</strong> — lyrics &amp; melody</li>
+            <li><strong>Lead vocals</strong></li>
           </ul>
+          <div class="lab-soon">More coming soon</div>
         </div>
         <div class="reveal d3">
           <div class="flower-plate">
-            <img src="assets/images/night.png" alt="Queen of the Night — nocturnal branding artwork">
+            <img src="assets/images/night.png" alt="Night-blooming Dama da Noite — early visual direction for the band">
           </div>
         </div>
       </div>
@@ -784,7 +1300,7 @@
 
   <section id="contact" data-label="Contact">
     <div class="inner reveal">
-      <div class="eyebrow" style="justify-content:center;">07 — Get in touch</div>
+      <div class="eyebrow" style="justify-content:center;">09 — Get in touch</div>
       <h2>Let's build the next<span class="accent">idea, together.</span></h2>
       <div class="handle">sabrinaruizalves@gmail.com</div>
       <div class="fineprint">Sabrina Ruiz Alves — Portfolio</div>
@@ -793,8 +1309,248 @@
 
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
 <script>
-  
+
+  /* ------------------------------------------------------------------
+     04 — Young Engineers: three Lego bricks fall in and assemble into a
+     small bridge. The build plays when the section scrolls into view and
+     rewinds when it leaves, so it replays on every visit. Falls back to
+     the CSS bricks if three.js or WebGL isn't available.
+  ------------------------------------------------------------------- */
+  (function () {
+    const stage = document.getElementById('brick-stage');
+    const canvas = document.getElementById('brick-canvas');
+    const section = document.getElementById('lego');
+    if (!stage || !canvas || !section || !window.THREE) return;
+
+    let renderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+    } catch (err) {
+      return; // keep the CSS bricks
+    }
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    if ('outputColorSpace' in renderer) renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+    const scene = new THREE.Scene();
+    const CAM = { x: 5.6, y: 3.4, z: 8.4 };
+    const LOOK_Y = 1.45;
+    const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
+    camera.position.set(CAM.x, CAM.y, CAM.z);
+    camera.lookAt(0, LOOK_Y, 0);
+
+    // soft studio light, warm enough to sit on the cream background
+    scene.add(new THREE.HemisphereLight(0xffffff, 0xd9d4c6, 0.72));
+    const key = new THREE.DirectionalLight(0xffffff, 1.45);
+    key.position.set(5.5, 9, 5.5);
+    key.castShadow = true;
+    key.shadow.mapSize.set(1024, 1024);
+    key.shadow.camera.near = 1;
+    key.shadow.camera.far = 30;
+    key.shadow.camera.left = -8;
+    key.shadow.camera.right = 8;
+    key.shadow.camera.top = 8;
+    key.shadow.camera.bottom = -8;
+    key.shadow.bias = -0.0012;
+    scene.add(key);
+    const rim = new THREE.DirectionalLight(0xffffff, 0.35);
+    rim.position.set(-6, 4, -5);
+    scene.add(rim);
+
+    // ground that only catches the shadow
+    const ground = new THREE.Mesh(
+      new THREE.PlaneGeometry(40, 40),
+      new THREE.ShadowMaterial({ opacity: 0.18 })
+    );
+    ground.rotation.x = -Math.PI / 2;
+    ground.receiveShadow = true;
+    scene.add(ground);
+
+    // one stud = 1 unit, brick height 1.2 — close to the real ratio
+    const STUD = 1;
+    const BRICK_H = 1.2;
+    const studGeo = new THREE.CylinderGeometry(0.3, 0.3, 0.2, 24);
+
+    function makeBrick(cols, rows, color) {
+      const group = new THREE.Group();
+      const mat = new THREE.MeshStandardMaterial({ color: color, roughness: 0.38, metalness: 0 });
+      const w = cols * STUD, d = rows * STUD;
+
+      const body = new THREE.Mesh(new THREE.BoxGeometry(w, BRICK_H, d), mat);
+      body.castShadow = true;
+      body.receiveShadow = true;
+      group.add(body);
+
+      for (let x = 0; x < cols; x++) {
+        for (let z = 0; z < rows; z++) {
+          const stud = new THREE.Mesh(studGeo, mat);
+          stud.position.set(
+            -w / 2 + STUD / 2 + x * STUD,
+            BRICK_H / 2 + 0.1,
+            -d / 2 + STUD / 2 + z * STUD
+          );
+          stud.castShadow = true;
+          group.add(stud);
+        }
+      }
+      return group;
+    }
+
+    const build = new THREE.Group();
+    scene.add(build);
+
+    // two pillars and a span across the top
+    const bricks = [
+      {
+        mesh: makeBrick(1, 2, 0xc8412f),
+        from: { x: -2.8, y: 2.6, z:  1.2, rx: 0.55, ry: -0.7,  rz: -0.42 },
+        to:   { x: -1.5, y: BRICK_H / 2, z: 0, rx: 0, ry: 0, rz: 0 },
+        start: 0.04, end: 0.42
+      },
+      {
+        mesh: makeBrick(1, 2, 0x3f9b5c),
+        from: { x:  2.9, y: 3.4, z: -1.4, rx: -0.6, ry: 0.85,  rz: 0.5 },
+        to:   { x:  1.5, y: BRICK_H / 2, z: 0, rx: 0, ry: 0, rz: 0 },
+        start: 0.28, end: 0.66
+      },
+      {
+        mesh: makeBrick(4, 2, 0xf0b429),
+        from: { x:  0.2, y: 4.2, z:  2.0, rx: 0.42, ry: -1.15, rz: 0.5 },
+        to:   { x:  0.0, y: BRICK_H * 1.5, z: 0, rx: 0, ry: 0, rz: 0 },
+        start: 0.52, end: 0.90
+      }
+    ];
+
+    bricks.forEach(function (b) {
+      b.mesh.position.set(b.from.x, b.from.y, b.from.z);
+      b.mesh.rotation.set(b.from.rx, b.from.ry, b.from.rz);
+      build.add(b.mesh);
+    });
+
+    const clamp01 = (v) => (v < 0 ? 0 : v > 1 ? 1 : v);
+    const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
+    const lerp = (a, b, t) => a + (b - a) * t;
+
+    // vertical drop with a short settle bounce, like a brick clicking in
+    function dropEase(t) {
+      if (t < 0.82) return easeOutCubic(t / 0.82);
+      const k = (t - 0.82) / 0.18;
+      return 1 + Math.sin(k * Math.PI) * 0.055 * (1 - k);
+    }
+
+    function layout(p, time) {
+      bricks.forEach(function (b, i) {
+        const t = clamp01((p - b.start) / (b.end - b.start));
+        const e = easeOutCubic(t);
+        const dy = dropEase(t);
+
+        b.mesh.position.x = lerp(b.from.x, b.to.x, e);
+        b.mesh.position.z = lerp(b.from.z, b.to.z, e);
+        b.mesh.position.y = lerp(b.from.y, b.to.y, Math.min(dy, 1)) +
+                            (dy > 1 ? (dy - 1) * 1.4 : 0);
+
+        b.mesh.rotation.x = lerp(b.from.rx, b.to.rx, e);
+        b.mesh.rotation.y = lerp(b.from.ry, b.to.ry, e);
+        b.mesh.rotation.z = lerp(b.from.rz, b.to.rz, e);
+
+        // before its turn comes, a brick drifts instead of hanging dead
+        if (t < 1) {
+          const idle = (1 - e) * 0.16;
+          b.mesh.position.y += Math.sin(time * 0.0009 + i * 2.1) * idle * 1.6;
+          b.mesh.rotation.z += Math.sin(time * 0.0007 + i * 1.3) * idle;
+        }
+      });
+
+      // turn towards the viewer as it settles, then keep a slow sway
+      const settled = clamp01((p - 0.78) / 0.22);
+      build.rotation.y = -0.1 + settled * 0.7 + settled * Math.sin(time * 0.00035) * 0.1;
+    }
+
+    function resize() {
+      const w = canvas.clientWidth;
+      const h = canvas.clientHeight;
+      if (!w || !h) return; // laid out later — the ResizeObserver will call back
+      renderer.setSize(w, h, false);
+      camera.aspect = w / h;
+      // a stage narrower than it is tall gets a smaller model, not a farther camera
+      build.scale.setScalar(Math.min(1, Math.max(0.5, camera.aspect)));
+      camera.lookAt(0, LOOK_Y, 0);
+      camera.updateProjectionMatrix();
+      renderer.render(scene, camera); // the loop may be idle while off-screen
+    }
+    // the stage is sized by the grid and by web fonts landing, so watch the
+    // element itself rather than only the window
+    if (window.ResizeObserver) new ResizeObserver(resize).observe(stage);
+    window.addEventListener('resize', resize);
+    resize();
+
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const scroller = document.getElementById('scroller');
+    const hint = document.getElementById('brick-hint');
+    const fill = document.getElementById('brick-progress-fill');
+
+    /* The section is taller than the viewport, so how far it has travelled
+       past the top is the build progress. */
+    function readProgress() {
+      const rect = section.getBoundingClientRect();
+      const total = section.offsetHeight - window.innerHeight;
+      if (total <= 0) return 0;
+      return clamp01(-rect.top / total);
+    }
+
+    /* Mandatory snap would yank us straight back to the top of a section
+       this tall, so it is switched off for as long as we are inside it. */
+    let snapOff = false;
+    function updateSnap() {
+      const rect = section.getBoundingClientRect();
+      // a few px of slack on each end so the toggle doesn't fight a snap
+      // animation that is still finishing
+      const edge = 6;
+      const inside = rect.top <= edge && rect.bottom >= window.innerHeight - edge;
+      if (inside === snapOff) return;
+      snapOff = inside;
+      scroller.style.scrollSnapType = inside ? 'none' : 'y mandatory';
+    }
+
+    let target = readProgress();
+    let progress = target;
+    let visible = false;
+    let rafId = null;
+
+    function frame(now) {
+      // easing towards the scroll target gives the build its slow, heavy feel
+      progress += (target - progress) * (reduce ? 1 : 0.085);
+      layout(progress, reduce ? 0 : now);
+      renderer.render(scene, camera);
+      rafId = visible ? requestAnimationFrame(frame) : null;
+    }
+
+    function onScroll() {
+      updateSnap();
+      target = readProgress();
+      hint.classList.toggle('gone', target > 0.03);
+      fill.style.width = (target * 100).toFixed(1) + '%';
+      if (visible && rafId === null) rafId = requestAnimationFrame(frame);
+    }
+    scroller.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+
+    new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        visible = entry.isIntersecting;
+        if (visible && rafId === null) rafId = requestAnimationFrame(frame);
+      });
+    }, { root: scroller, threshold: 0 }).observe(section);
+
+    stage.classList.add('live');
+    onScroll();
+    layout(progress, 0);
+    renderer.render(scene, camera);
+  })();
+
   (function () {
     const gallery = document.getElementById('klg-gallery');
     if (!gallery) return;
@@ -825,7 +1581,9 @@
 
   sections.forEach((sec, i) => {
     const btn = document.createElement('button');
-    btn.setAttribute('aria-label', sec.dataset.label || ('Section ' + (i+1)));
+    const label = sec.dataset.label || ('Section ' + (i+1));
+    btn.setAttribute('aria-label', label);
+    btn.setAttribute('data-label', label);
     btn.addEventListener('click', () => sec.scrollIntoView({behavior:'smooth'}));
     navdots.appendChild(btn);
   });
@@ -838,10 +1596,13 @@
   }, { root: scroller, threshold: 0.35 });
   document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
+  /* A band across the middle of the viewport decides which section is
+     "current". Using the visible ratio would break for #lego, which is
+     several screens tall and so never fills much of the viewport at once. */
   const sectionObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       const idx = sections.indexOf(entry.target);
-      if (entry.isIntersecting && entry.intersectionRatio > 0.55) {
+      if (entry.isIntersecting) {
         dotButtons.forEach(b => b.classList.remove('active'));
         if (dotButtons[idx]) dotButtons[idx].classList.add('active');
 
@@ -849,12 +1610,14 @@
           document.body.style.background = '#33418c';
         } else if (entry.target.id === 'band') {
           document.body.style.background = '#000000';
+        } else if (entry.target.id === 'teddy') {
+          document.body.style.background = '#f7f1ea';
         } else {
           document.body.style.background = '#f5f3ee';
         }
       }
     });
-  }, { root: scroller, threshold: [0.55] });
+  }, { root: scroller, rootMargin: '-45% 0px -45% 0px', threshold: 0 });
   sections.forEach(sec => sectionObserver.observe(sec));
 </script>
 
